@@ -1,0 +1,18 @@
+@@ -82,8 +82,9 @@ def conda(self, line):
+conda = _get_conda_executable()
+        args = shlex.split(line)
+        command = args[0]
+        args = args[1:]
+        command = args[0] if len(args) > 0 else ""
+        args = args[1:] if len(args) > 1 else [""]
+
+        extra_args = []
+
+        # When the subprocess does not allow us to respond "yes" during the installation,
+        # we need to insert --yes in the argument list for some commands
+        stdin_disabled = getattr(self.shell, 'kernel', None) is not None
+        needs_yes = command in CONDA_COMMANDS_REQUIRING_YES
+        has_yes = set(args).intersection(CONDA_YES_FLAGS)
+        if stdin_disabled and needs_yes and not has_yes:
+            extra_args.append("--yes")
+            
